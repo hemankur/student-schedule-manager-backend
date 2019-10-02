@@ -1,1 +1,1 @@
-# student-schedule-manager
+# student-schedule-manager-backend
