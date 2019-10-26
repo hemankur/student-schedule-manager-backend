@@ -3,6 +3,10 @@ import express = require('express');
 let app = express();
 let users = require('../lib/users/users');
 
+let bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.use(users);
 
 app.listen(8011);

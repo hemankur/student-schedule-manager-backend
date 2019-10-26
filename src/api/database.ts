@@ -17,12 +17,10 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     } else {
         process.stdout.write('Connecting to the SQLite database... ');
         dbRun(db, `CREATE TABLE IF NOT EXISTS users (
-            userID TEXT UNIQUE,
+            username TEXT UNIQUE,
             displayName TEXT,
-            email TEXT,
             password TEXT,
-            salt TEXT,
-            accountCreatedTime INTEGER
+            year NUMBER
         )`, []);
         process.stdout.write('done\n');
     }
