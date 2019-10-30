@@ -36,5 +36,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         process.stdout.write('done\n');
     }
 });
+//ak comment
 
 module.exports = db;
