@@ -11,7 +11,6 @@ app.use(cors());
  * GET request for users table
  */
 app.get('/api/users/', (req, res) => {
-    console.log('get users...');
     let sql = 'select * from users';
     let params = [];
     db.all(sql, params, (err, rows) => {

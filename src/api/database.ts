@@ -22,6 +22,17 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             password TEXT,
             year NUMBER
         )`, []);
+        dbRun(db, `CREATE TABLE IF NOT EXISTS courses (
+            courseID NUMBER UNIQUE,
+            department TEXT,
+            courseNumber NUMBER,
+            courseName TEXT,
+            term TEXT,
+            instructor TEXT,
+            location TEXT,
+            day TEXT,
+            time TEXT
+        )`, []);
         process.stdout.write('done\n');
     }
 });
