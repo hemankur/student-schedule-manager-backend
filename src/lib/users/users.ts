@@ -11,7 +11,6 @@ app.use(cors());
  * GET request for users table
  */
 app.get('/api/users/', (req, res) => {
-    console.log('get users...');
     let sql = 'select * from users';
     let params = [];
     db.all(sql, params, (err, rows) => {
@@ -32,22 +31,30 @@ app.get('/api/users/', (req, res) => {
 app.post('/api/user/login/', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
+    console.log(username);
+    console.log(password);
     let sql = 'select * from users where username = ?';
     let params = [username];
-    db.all(sql, params, (err, rows) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({error: err.message});
-        } else {
-            let pass = rows[0].password;
+            return;
+        } else if (row) {
+            console.log(row);
+            let pass = row.password;
             if (pass === password) {
                 res.json({
                     message: 'success'
                 });
             } else {
-                res.json({
-                    message: 'failure',
+                res.status(400).json({
+                    error: 'failure',
                 });
             }
+        } else {
+            res.status(400).json({
+                error: 'failure'
+            });
         }
     });
 });
