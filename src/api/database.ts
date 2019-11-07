@@ -31,11 +31,13 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             instructor TEXT,
             location TEXT,
             day TEXT,
-            time TEXT
+            time TEXT,
+            capacity NUMBER, 
+            active NUMBER
         )`, []);
         process.stdout.write('done\n');
     }
 });
-//ak comment
+
 
 module.exports = db;

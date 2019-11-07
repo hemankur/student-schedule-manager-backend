@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "target": "es5",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "es5",
+      "scripthost",
+      "es2015.promise"
+    ]
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}
