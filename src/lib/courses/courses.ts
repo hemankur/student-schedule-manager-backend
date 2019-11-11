@@ -52,3 +52,31 @@ app.post('/api/courses/register', (req, res) => {
         }
     });
 });
+
+/**
+ * Patch request that takes sid and courseID and deleted the entry from the registered table, if present.
+ */
+app.patch('/api/courses/unregister', (req, res) => {
+    let sql = 'select * from registered where sid = ? and courseID = ?';
+    let params = [req.body.sid, req.body.courseID];
+
+    db.get(sql, params, (err, rows) => {
+        if (err) {
+            console.log(err);
+        }
+        if (!rows) {
+            res.json({message: 'Student already unregistered'});
+            return;
+        } else if (rows) {
+            sql = 'delete from registered where sid = ? and courseID = ?';
+            db.run(sql, params, (err) => {
+                if (err) {
+                    res.status(400).json({error: err});
+                    return;
+                } else {
+                    res.json({message: 'success'});
+                }
+            });
+        }
+    });
+});
