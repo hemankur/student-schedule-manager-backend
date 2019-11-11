@@ -35,6 +35,9 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             capacity NUMBER, 
             active NUMBER
         )`, []);
+        dbRun(db, `CREATE TABLE IF NOT EXISTS registered (
+        sid NUMBER, 
+        courseID NUMBER)`, []);
         process.stdout.write('done\n');
     }
 });
