@@ -31,8 +31,6 @@ app.get('/api/users/', (req, res) => {
 app.post('/api/user/login/', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-    console.log(username);
-    console.log(password);
     let sql = 'select * from users where username = ?';
     let params = [username];
     db.get(sql, params, (err, row) => {
@@ -40,7 +38,6 @@ app.post('/api/user/login/', (req, res) => {
             res.status(400).json({error: err.message});
             return;
         } else if (row) {
-            console.log(row);
             let pass = row.password;
             if (pass === password) {
                 res.json({
