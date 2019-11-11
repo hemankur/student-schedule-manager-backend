@@ -27,6 +27,7 @@ app.get('/api/courses/', (req, res) => {
 
 /**
  * POST request that takes sid and courseID and adds them to the registered table if a record doesn't already exist.
+ * Also updates the active capacity
  */
 app.post('/api/courses/register', (req, res) => {
     let sql = 'select * from registered where sid = ? and courseID = ?';
@@ -40,15 +41,38 @@ app.post('/api/courses/register', (req, res) => {
             res.json({message: 'Student already registered'});
             return;
         } else if (!rows) {
-            sql = 'insert into registered (sid, courseID) values (?, ?)';
-            db.run(sql, params, (err) => {
+            sql = 'select * from courses where courseID = ?';
+            params = [req.body.courseID];
+            db.get(sql, params, (err, row) => {
                 if (err) {
-                    res.status(400).json({error: err});
-                    return;
+                    console.log(err);
                 } else {
-                    res.json({message: 'success'});
+                    if (row.active >= row.capacity) {
+                        res.json({message: 'Capacity full. Please try later.'});
+                        return;
+                    } else {
+                        sql = 'update courses set active = ? where courseID = ?';
+                        params = [row.active + 1, req.body.courseID];
+                        db.run(sql, params, (err) => {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                sql = 'insert into registered (sid, courseID) values (?, ?)';
+                                params = [req.body.sid, req.body.courseID];
+                                db.run(sql, params, (err) => {
+                                    if (err) {
+                                        res.status(400).json({error: err});
+                                        return;
+                                    } else {
+                                        res.json({message: 'success'});
+                                    }
+                                });
+                            }
+                        })
+                    }
                 }
             });
+
         }
     });
 });
@@ -74,7 +98,23 @@ app.patch('/api/courses/unregister', (req, res) => {
                     res.status(400).json({error: err});
                     return;
                 } else {
-                    res.json({message: 'success'});
+                    sql = 'select * from courses where courseID = ?';
+                    params = [req.body.courseID];
+                    db.get(sql, params, (err, row) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            const newActive = row.active - 1;
+                            sql = 'update courses set active = ? where courseID = ?';
+                            params = [newActive, req.body.courseID];
+                            db.run(sql, params, (err) => {
+                                if (err) console.log(err);
+                                else {
+                                    res.json({message: 'success'});
+                                }
+                            });
+                        }
+                    });
                 }
             });
         }
