@@ -26,6 +26,41 @@ app.get('/api/users/', (req, res) => {
 });
 
 /**
+ * GET request for users preferences
+ */
+app.get('/api/users/preferences/:username/', (req, res) => {
+    let sql = 'select preferences from users where username = ?';
+    let params = [req.params.username];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({error: err.message});
+        } else {
+            res.json({
+                message: 'success',
+                data: rows
+            });
+        }
+    });
+});
+
+/**
+ * POST request for users preferences
+ */
+app.post('/api/users/preferences/', (req, res) => {
+    let sql = 'update users set preferences = ? where username = ?';
+    let params = [JSON.stringify(req.body.preferences), req.body.username];
+    db.run(sql, params, (err) => {
+        if (err) {
+            res.status(400).json({error: err.message});
+        } else {
+            res.json({
+                message: 'success'
+            });
+        }
+    });
+});
+
+/**
  * Post request to login a user
  */
 app.post('/api/user/login/', (req, res) => {
