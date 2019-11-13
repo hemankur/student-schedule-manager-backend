@@ -26,6 +26,24 @@ app.get('/api/users/', (req, res) => {
 });
 
 /**
+ * GET request that returns courses taken by the student
+ */
+app.get('/api/users/:username', (req, res) => {
+    let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?)';
+    let params = [req.params.username];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({error: err.message});
+        } else {
+            res.json({
+                message: 'success',
+                data: rows
+            });
+        }
+    });
+});
+
+/**
  * GET request for users preferences
  */
 app.get('/api/users/preferences/:username/', (req, res) => {
