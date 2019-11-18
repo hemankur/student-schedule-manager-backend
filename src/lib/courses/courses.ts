@@ -25,6 +25,32 @@ app.get('/api/courses/', (req, res) => {
     });
 });
 
+
+/**
+ * GET request that returns true if course is taken by the user
+ */
+app.get('/api/courses/:username/:courseID', (req, res) => {
+    let sql = 'select * from registered where sid = ? and courseID = ?';
+    let params = [req.params.username, req.params.courseID];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if (rows.length) {
+                res.json({
+                    message: 'success',
+                    value: true
+                });
+                return;
+            } else
+                res.json({
+                    message: 'success',
+                    value: false
+                });
+        }
+    });
+});
+
 /**
  * POST request that takes sid and courseID and adds them to the registered table if a record doesn't already exist.
  * Also updates the active capacity
@@ -41,7 +67,6 @@ app.post('/api/courses/register', (req, res) => {
             console.log(err);
         }
         if (rows) {
-            console.log(rows);
             for (const row of rows) {
                 if (row.courseID === req.body.courseID) {
                     res.json({
@@ -63,7 +88,6 @@ app.post('/api/courses/register', (req, res) => {
                     for (const row of rows) {
                         dayTime.push(row.day + '' + row.time);
                     }
-                    console.log(dayTime);
                     let sql = 'select * from courses where courseID = ?';
                     let params = [req.body.courseID];
 
@@ -72,7 +96,6 @@ app.post('/api/courses/register', (req, res) => {
                             console.log(err);
                         } else {
                             newDayTime = row.day + row.time;
-                            console.log(newDayTime);
                             let conflict = false;
                             for (const item of dayTime) {
                                 if (item === newDayTime) {
@@ -93,7 +116,10 @@ app.post('/api/courses/register', (req, res) => {
                                         console.log(err);
                                     } else {
                                         if (row.active >= row.capacity) {
-                                            res.json({message: 'Capacity full. Please try later.'});
+                                            res.json({
+                                                error: 'Full',
+                                                message: 'Capacity full. Please try later.'
+                                            });
                                             return;
                                         } else {
                                             sql = 'update courses set active = ? where courseID = ?';
@@ -169,3 +195,4 @@ app.patch('/api/courses/unregister', (req, res) => {
         }
     });
 });
+
