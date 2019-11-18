@@ -28,7 +28,7 @@ app.get('/api/users/', (req, res) => {
 /**
  * GET request that returns courses taken by the student
  */
-app.get('/api/users/:username', (req, res) => {
+app.get('/api/users/:username/', (req, res) => {
     let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?)';
     let params = [req.params.username];
     db.all(sql, params, (err, rows) => {
