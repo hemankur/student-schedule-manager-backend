@@ -115,13 +115,13 @@ app.post('/api/user/login/', (req, res) => {
 app.get('/api/users/data/:username/', (req, res) => {
     let sql = 'select * from users where username = ?';
     let params = [req.params.username];
-    db.all(sql, params, (err, rows) => {
+        db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({error: err.message});
         } else {
             res.json({
                 message: 'success',
-                data: rows
+                data: row
             });
         }
     });
