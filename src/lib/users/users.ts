@@ -115,13 +115,75 @@ app.post('/api/user/login/', (req, res) => {
 app.get('/api/users/data/:username/', (req, res) => {
     let sql = 'select * from users where username = ?';
     let params = [req.params.username];
-        db.get(sql, params, (err, row) => {
+    db.get(sql, params, (err, row) => {
         if (err) {
             res.status(400).json({error: err.message});
         } else {
             res.json({
                 message: 'success',
                 data: row
+            });
+        }
+    });
+});
+
+app.patch('/api/users/email/', (req, res) => {
+    let sql = 'update users set email = ? where username = ?';
+    let params = [req.body.data, req.body.username];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({
+                message: 'success'
+            });
+        }
+    });
+});
+
+
+app.patch('/api/users/phone/', (req, res) => {
+    let sql = 'update users set phone = ? where username = ?';
+    let params = [req.body.data, req.body.username];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({
+                message: 'success'
+            });
+        }
+    });
+});
+
+
+app.patch('/api/users/emergency/', (req, res) => {
+    let sql = 'update users set emergencyName = ?, emergencyNumber = ? where username = ?';
+    let params = [req.body.data.emergencyName, req.body.data.emergencyNumber, req.body.username];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({
+                message: 'success'
+            });
+        }
+    });
+});
+
+app.patch('/api/users/address/', (req, res) => {
+    let sql = 'update users set houseNumber = ?, street = ?, city = ?, state = ?, country = ?, zipCode = ? where username = ?';
+    let params = [req.body.data.houseNumber, req.body.data.street, req.body.data.city, req.body.data.state, req.body.data.country, req.body.data.zipCode, req.body.username];
+
+    db.run(sql, params, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.json({
+                message: 'success'
             });
         }
     });
