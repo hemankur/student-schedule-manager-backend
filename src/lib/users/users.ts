@@ -108,3 +108,21 @@ app.post('/api/user/login/', (req, res) => {
         }
     });
 });
+
+/**
+ * GET request that returns courses taken by the student
+ */
+app.get('/api/users/data/:username/', (req, res) => {
+    let sql = 'select * from users where username = ?';
+    let params = [req.params.username];
+    db.all(sql, params, (err, rows) => {
+        if (err) {
+            res.status(400).json({error: err.message});
+        } else {
+            res.json({
+                message: 'success',
+                data: rows
+            });
+        }
+    });
+});
