@@ -82,6 +82,17 @@ app.post('/api/users/preferences/', (req, res) => {
  * Post request to login a user
  */
 app.post('/api/user/login/', (req, res) => {
+    let errors = [];
+    if (!req.body.username) {
+        errors.push("Missing username");
+    }
+    if (!req.body.password) {
+        errors.push("Missing password");
+    }
+    if (errors.length) {
+        res.status(400).json({error: 'Invalid credentials', message: errors.join(' & ')});
+        return;
+    }
     let username = req.body.username;
     let password = req.body.password;
     let sql = 'select * from users where username = ?';
@@ -98,12 +109,12 @@ app.post('/api/user/login/', (req, res) => {
                 });
             } else {
                 res.status(400).json({
-                    error: 'failure',
+                    error: 'Invalid Credentials',
                 });
             }
         } else {
             res.status(400).json({
-                error: 'failure'
+                error: 'Invalid Credentials'
             });
         }
     });
