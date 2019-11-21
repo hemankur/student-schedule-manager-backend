@@ -127,56 +127,12 @@ app.get('/api/users/data/:username/', (req, res) => {
     });
 });
 
-app.patch('/api/users/email/', (req, res) => {
-    let sql = 'update users set email = ? where username = ?';
-    let params = [req.body.data, req.body.username];
-
-    db.run(sql, params, (err) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json({
-                message: 'success'
-            });
-        }
-    });
-});
-
-
-app.patch('/api/users/phone/', (req, res) => {
-    let sql = 'update users set phone = ? where username = ?';
-    let params = [req.body.data, req.body.username];
-
-    db.run(sql, params, (err) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json({
-                message: 'success'
-            });
-        }
-    });
-});
-
-
-app.patch('/api/users/emergency/', (req, res) => {
-    let sql = 'update users set emergencyName = ?, emergencyNumber = ? where username = ?';
-    let params = [req.body.data.emergencyName, req.body.data.emergencyNumber, req.body.username];
-
-    db.run(sql, params, (err) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json({
-                message: 'success'
-            });
-        }
-    });
-});
-
-app.patch('/api/users/address/', (req, res) => {
-    let sql = 'update users set houseNumber = ?, street = ?, city = ?, state = ?, country = ?, zipCode = ? where username = ?';
-    let params = [req.body.data.houseNumber, req.body.data.street, req.body.data.city, req.body.data.state, req.body.data.country, req.body.data.zipCode, req.body.username];
+/**
+ * Patch request to update user's personal information
+ */
+app.patch('/api/users/data/', (req, res) => {
+    let sql = 'update users set houseNumber = ?, street = ?, city = ?, state = ?, country = ?, zipCode = ?, emergencyName = ?, emergencyNumber = ?, phone = ?, email = ? where username = ?';
+    let params = [req.body.houseNumber, req.body.street, req.body.city, req.body.state, req.body.country, req.body.zipCode, req.body.emergencyName, req.body.emergencyNumber, req.body.phone, req.body.email, req.body.username];
 
     db.run(sql, params, (err) => {
         if (err) {
