@@ -78,8 +78,8 @@ app.post('/api/courses/register', (req, res) => {
                     courses.push(row.courseID);
                 }
             }
-            let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?)';
-            let params = [req.body.sid];
+            let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?) and term = ?';
+            let params = [req.body.sid, req.body.term];
 
             db.all(sql, params, (err, rows) => {
                 if (err) {
@@ -177,8 +177,8 @@ app.post('/api/courses/check/', (req, res) => {
                     return;
                 }
             }
-            let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?)';
-            let params = [req.body.sid];
+            let sql = 'select * from courses where courseID in (select courseID from registered where registered.sid = ?) and term = ?';
+            let params = [req.body.sid, req.body.term];
 
             db.all(sql, params, (err, rows) => {
                 if (err) {
